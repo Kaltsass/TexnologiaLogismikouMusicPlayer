@@ -1,86 +1,107 @@
 import javazoom.jl.player.advanced.AdvancedPlayer;
 import javazoom.jl.player.advanced.PlaybackEvent;
 import javazoom.jl.player.advanced.PlaybackListener;
-
 import java.io.BufferedInputStream;
-import java.io.BufferedWriter;
 import java.io.FileInputStream;
 
 public class MusicPlayer extends PlaybackListener {
+    private static final Object playSignal = new Object();
+    private MusicPlayerGUI musicPlayerGUI;
     private Song currentSong;
-    //creating AdvancedPlayer
     private AdvancedPlayer advancedPlayer;
-    //pauses boolean flag
-    private boolean isPaused;
-    //pausing resuming
-    private int currentFrame;
+    private boolean isPaused = false;
+    private int currentFrame = 0;
+    private int currentTimeInMilli = 0;
 
-    //constructor
-    public MusicPlayer(){
-
+    public MusicPlayer(MusicPlayerGUI musicPlayerGUI) {
+        this.musicPlayerGUI = musicPlayerGUI;
     }
-    public void loadSong(Song song){
-        currentSong = song;
 
-        if(currentSong != null){
+    public Song getCurrentSong() {
+        return currentSong;
+    }
+
+    public void setCurrentFrame(int frame) {
+        currentFrame = frame;
+    }
+
+    public void setCurrentTimeInMilli(int timeInMilli) {
+        currentTimeInMilli = timeInMilli;
+    }
+
+    public void loadSong(Song song) {
+        currentSong = song;
+        currentFrame = 0;
+        currentTimeInMilli = 0;
+        if (currentSong != null) {
             playCurrentSong();
         }
     }
-    //flag
-    public void pauseSong(){
-        if(advancedPlayer != null){
-            //updating flag
+
+    public void pauseSong() {
+        if (advancedPlayer != null && !isPaused) {
             isPaused = true;
-            //stopping the mp3 player
             stopSong();
         }
     }
 
-    public void stopSong(){
-        if(advancedPlayer!=null){
-            advancedPlayer.stop();
-            advancedPlayer.close();
-            advancedPlayer=null;
+    public void stopSong() {
+        if (advancedPlayer != null) {
+            try {
+                advancedPlayer.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            advancedPlayer = null;
         }
     }
 
     public void playCurrentSong() {
-        if(currentSong == null)return;
+        if (currentSong == null) return;
+
         try {
             FileInputStream fileInputStream = new FileInputStream(currentSong.getFilePath());
             BufferedInputStream bufferedInputStream = new BufferedInputStream(fileInputStream);
 
-
-            //advanced player
-
             advancedPlayer = new AdvancedPlayer(bufferedInputStream);
             advancedPlayer.setPlayBackListener(this);
 
-
-            //start music
-
             startMusicThread();
+            startPlaybackSliderThread();
 
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-
-    private void    startMusicThread(){
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-
-                    if(isPaused){
-                        //resume music from last frame
-                        advancedPlayer.play(currentFrame,Integer.MAX_VALUE);
-                    }else{
-                        //reset music
-                        advancedPlayer.play();
+    private void startMusicThread() {
+        new Thread(() -> {
+            try {
+                if (isPaused) {
+                    synchronized (playSignal) {
+                        isPaused = false;
+                        playSignal.notify();
                     }
-                }catch (Exception e){
+                    advancedPlayer.play(currentFrame, Integer.MAX_VALUE);
+                } else {
+                    currentFrame = 0;
+                    advancedPlayer.play();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }).start();
+    }
+
+    private void startPlaybackSliderThread() {
+        new Thread(() -> {
+            while (advancedPlayer != null && !isPaused) {
+                try {
+                    currentTimeInMilli++;
+                    int calculatedFrame = (int) ((double) currentTimeInMilli * 2.08 * currentSong.getFrameRatePerMilliseconds());
+                    musicPlayerGUI.setPlaybackSliderValue(calculatedFrame);
+                    Thread.sleep(10);
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
@@ -89,20 +110,17 @@ public class MusicPlayer extends PlaybackListener {
 
     @Override
     public void playbackStarted(PlaybackEvent evt) {
-        //called in the beginning of the song
-
         System.out.println("Playback Started");
     }
 
     @Override
     public void playbackFinished(PlaybackEvent evt) {
-        //gets called when the song finishes or if the player gets called
         System.out.println("Playback Finished");
 
-
-        if(isPaused){
-            currentFrame+= (int)((double)evt.getFrame()*currentSong.getFrameRatePerMilliseconds());
-
+        if (!isPaused) {
+            currentFrame = 0;
+        } else {
+            currentFrame += evt.getFrame();
         }
     }
 }

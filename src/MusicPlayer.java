@@ -39,7 +39,7 @@ public class MusicPlayer extends PlaybackListener {
             BufferedReader bufferedReader = new BufferedReader(fileReader);
             // reach each line from the file and store the text int the songPath variable
             String songPath;
-            while((songPath == bufferedReader.readLine()) !=null){
+            while((songPath = bufferedReader.readLine()) !=null){
                 // create song object based on song path
                 Song song = new Song(songPath);
 
@@ -50,9 +50,7 @@ public class MusicPlayer extends PlaybackListener {
             e.printStackTrace();
         }
         if(playlist.size() > 0){
-            // reset playback slider
-            musicPlayerGui.setPlaybackSliderValue(0);
-            currentTimeInMilli= 0;
+
 
             //update current song to the first song in the playlist
             currentSong = playlist.get(0);
@@ -60,10 +58,6 @@ public class MusicPlayer extends PlaybackListener {
             //start from the beginning frame
             currentFrame = 0;
 
-            //update gui
-            musicPlayerGUI.enablePauseButtonDisablePlayButton();
-            musicPlayerGUI.updateSongTitleAndArtist(currentSong);
-            musicPlayerGUI.updatePlaybackSlider(currentSong);
 
             //start song
             playCurrentSong();
@@ -104,11 +98,7 @@ public class MusicPlayer extends PlaybackListener {
         //reset frame
         currentFrame = 0 ;
 
-        currentTimeInMilli = 0;
 
-        musicPlayerGUI.enablePauseButtonDisablePlayButton();
-        musicPlayerGUI.updateSongTitleAndArtist(currentSong);
-        musicPlayerGUI.updatePlaybackSlider(currentSong);
 
         playCurrentSong();
 
@@ -132,11 +122,6 @@ public class MusicPlayer extends PlaybackListener {
         //reset frame
         currentFrame = 0 ;
 
-        currentTimeInMilli = 0;
-
-        musicPlayerGUI.enablePauseButtonDisablePlayButton();
-        musicPlayerGUI.updateSongTitleAndArtist(currentSong);
-        musicPlayerGUI.updatePlaybackSlider(currentSong);
 
         playCurrentSong();
     }
@@ -200,18 +185,7 @@ public class MusicPlayer extends PlaybackListener {
         if(isPaused){
             currentFrame+= (int)((double)evt.getFrame()*currentSong.getFrameRatePerMilliseconds());
 
-        }else{
-            // when the song ends
-            if (playlist == null){
-                //update gui
-                musicPlayerGUI.enablePlayButtonDisablePauseButton();
-            }else{
-                //last song in playlist
-                if(currentPlaylistIndex == playlist.size) - 1){
-                   //update gui
-                    musicPlayerGUI.enablePlayButtonDisablePauseButton();
-                }
-            }
+        }
         }
     }
-}
+

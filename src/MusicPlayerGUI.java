@@ -113,8 +113,34 @@ public class MusicPlayerGUI extends JFrame {
         JMenu playlistMenu = new JMenu("Playlist");
         menuBar.add(playlistMenu);
         JMenuItem createPlaylist = new JMenuItem("Create Playlist");
+        createPlaylist.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // load music playlist dialog
+                new MusicPlaylistDialog(MusicPlayerGUI.this).setVisible(true);
+            }
+        });
         playlistMenu.add(createPlaylist);
         JMenuItem loadPlaylist = new JMenuItem("Load Playlist");
+        loadPlaylist.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JFileChooser jFileChooser = new JFileChooser();
+                jFileChooser.setFileFilter(new FileNameExtensionFilter("Playlist","txt"));
+                jFileChooser.setCurrentDirectory(new File("src/assets"));
+
+                int result = jFileChooser.showOpenDialog(MusicPlayerGUI.this);
+                File selectedFile = jFileChooser.getSelectedFile();
+
+                if(result == JFileChooser.APPROVE_OPTION && selectedFile != null){
+                    // stop the music
+                    musicPlayer.stopSong();
+
+                    // load playlist
+                    musicPlayer.loadPlaylist(selectedFile);
+                }
+            }
+        });
         playlistMenu.add(loadPlaylist);
 
         add(toolBar);
@@ -128,6 +154,13 @@ public class MusicPlayerGUI extends JFrame {
         JButton prevButton = new JButton(loadImage("src/assets/drive-download-20241029T152703Z-001/previous.png"));
         prevButton.setBackground(null);
         prevButton.setBorderPainted(false);
+        prevButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // go to the previous song
+                musicPlayer.prevSong();
+            }
+        });
         playbackBtns.add(prevButton);
 
         JButton playButton = new JButton(loadImage("src/assets/drive-download-20241029T152703Z-001/play.png"));
@@ -152,6 +185,14 @@ public class MusicPlayerGUI extends JFrame {
         JButton nextButton = new JButton(loadImage("src/assets/drive-download-20241029T152703Z-001/next.png"));
         nextButton.setBackground(null);
         nextButton.setBorderPainted(false);
+        nextButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+             // go to the next song
+                musicPlayer.nextSong();
+            }
+        });
         playbackBtns.add(nextButton);
 
         add(playbackBtns);

@@ -1,107 +1,168 @@
 import javazoom.jl.player.advanced.AdvancedPlayer;
 import javazoom.jl.player.advanced.PlaybackEvent;
 import javazoom.jl.player.advanced.PlaybackListener;
-import java.io.BufferedInputStream;
-import java.io.FileInputStream;
+
+import java.io.*;
+import java.util.ArrayList;
 
 public class MusicPlayer extends PlaybackListener {
-    private static final Object playSignal = new Object();
-    private MusicPlayerGUI musicPlayerGUI;
     private Song currentSong;
+    //creating AdvancedPlayer
     private AdvancedPlayer advancedPlayer;
-    private boolean isPaused = false;
-    private int currentFrame = 0;
-    private int currentTimeInMilli = 0;
+    //pauses boolean flag
+    private boolean isPaused;
+    //pausing resuming
+    private int currentFrame;
+    // playlist index
+    private int currentPlaylistIndex;
 
-    public MusicPlayer(MusicPlayerGUI musicPlayerGUI) {
-        this.musicPlayerGUI = musicPlayerGUI;
+    private ArrayList<Song> playlist;
+
+    //constructor
+    public MusicPlayer(){
+
     }
-
-    public Song getCurrentSong() {
-        return currentSong;
-    }
-
-    public void setCurrentFrame(int frame) {
-        currentFrame = frame;
-    }
-
-    public void setCurrentTimeInMilli(int timeInMilli) {
-        currentTimeInMilli = timeInMilli;
-    }
-
-    public void loadSong(Song song) {
+    public void loadSong(Song song){
         currentSong = song;
-        currentFrame = 0;
-        currentTimeInMilli = 0;
-        if (currentSong != null) {
+
+        if(currentSong != null){
             playCurrentSong();
         }
     }
 
-    public void pauseSong() {
-        if (advancedPlayer != null && !isPaused) {
+    public void loadPlaylist(File playlistFile){
+        playlist = new ArrayList<>();
+
+        // store the paths from the text file into the playlist array list
+        try{
+            FileReader fileReader = new FileReader(playlistFile);
+            BufferedReader bufferedReader = new BufferedReader(fileReader);
+            // reach each line from the file and store the text int the songPath variable
+            String songPath;
+            while((songPath = bufferedReader.readLine()) !=null){
+                // create song object based on song path
+                Song song = new Song(songPath);
+
+                // add to playlist array list
+                playlist.add(song);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        if(playlist.size() > 0){
+
+
+            //update current song to the first song in the playlist
+            currentSong = playlist.get(0);
+
+            //start from the beginning frame
+            currentFrame = 0;
+
+
+            //start song
+            playCurrentSong();
+        }
+    }
+
+    //flag
+    public void pauseSong(){
+        if(advancedPlayer != null){
+            //updating flag
             isPaused = true;
+            //stopping the mp3 player
             stopSong();
         }
     }
 
-    public void stopSong() {
-        if (advancedPlayer != null) {
-            try {
-                advancedPlayer.close();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            advancedPlayer = null;
+    public void stopSong(){
+        if(advancedPlayer!=null){
+            advancedPlayer.stop();
+            advancedPlayer.close();
+            advancedPlayer=null;
         }
+    }
+    public void nextSong(){
+        if (playlist == null)return;
+        // check if we reached the end of the playlist, if so don't do anything
+        if(currentPlaylistIndex + 1 > playlist.size() - 1) return;
+
+        //stop the song
+        stopSong();
+
+        // increase playlist index
+        currentPlaylistIndex++;
+
+        // update current song
+        currentSong = playlist.get(currentPlaylistIndex);
+
+        //reset frame
+        currentFrame = 0 ;
+
+
+
+        playCurrentSong();
+
+    }
+
+    public void prevSong(){
+        if (playlist == null)return;
+
+        // check to see if we can go to previous song
+        if(currentPlaylistIndex - 1 < 0) return;
+
+        //stop the song
+        stopSong();
+
+        // decrease playlist index
+        currentPlaylistIndex--;
+
+        // update current song
+        currentSong = playlist.get(currentPlaylistIndex);
+
+        //reset frame
+        currentFrame = 0 ;
+
+
+        playCurrentSong();
     }
 
     public void playCurrentSong() {
-        if (currentSong == null) return;
-
+        if(currentSong == null)return;
         try {
             FileInputStream fileInputStream = new FileInputStream(currentSong.getFilePath());
             BufferedInputStream bufferedInputStream = new BufferedInputStream(fileInputStream);
 
+
+            //advanced player
+
             advancedPlayer = new AdvancedPlayer(bufferedInputStream);
             advancedPlayer.setPlayBackListener(this);
 
-            startMusicThread();
-            startPlaybackSliderThread();
 
-        } catch (Exception e) {
+            //start music
+
+            startMusicThread();
+
+        }catch(Exception e){
             e.printStackTrace();
         }
     }
 
-    private void startMusicThread() {
-        new Thread(() -> {
-            try {
-                if (isPaused) {
-                    synchronized (playSignal) {
-                        isPaused = false;
-                        playSignal.notify();
-                    }
-                    advancedPlayer.play(currentFrame, Integer.MAX_VALUE);
-                } else {
-                    currentFrame = 0;
-                    advancedPlayer.play();
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }).start();
-    }
 
-    private void startPlaybackSliderThread() {
-        new Thread(() -> {
-            while (advancedPlayer != null && !isPaused) {
+    private void    startMusicThread(){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
                 try {
-                    currentTimeInMilli++;
-                    int calculatedFrame = (int) ((double) currentTimeInMilli * 2.08 * currentSong.getFrameRatePerMilliseconds());
-                    musicPlayerGUI.setPlaybackSliderValue(calculatedFrame);
-                    Thread.sleep(10);
-                } catch (Exception e) {
+
+                    if(isPaused){
+                        //resume music from last frame
+                        advancedPlayer.play(currentFrame,Integer.MAX_VALUE);
+                    }else{
+                        //reset music
+                        advancedPlayer.play();
+                    }
+                }catch (Exception e){
                     e.printStackTrace();
                 }
             }
@@ -110,17 +171,21 @@ public class MusicPlayer extends PlaybackListener {
 
     @Override
     public void playbackStarted(PlaybackEvent evt) {
+        //called in the beginning of the song
+
         System.out.println("Playback Started");
     }
 
     @Override
     public void playbackFinished(PlaybackEvent evt) {
+        //gets called when the song finishes or if the player gets called
         System.out.println("Playback Finished");
 
-        if (!isPaused) {
-            currentFrame = 0;
-        } else {
-            currentFrame += evt.getFrame();
+
+        if(isPaused){
+            currentFrame+= (int)((double)evt.getFrame()*currentSong.getFrameRatePerMilliseconds());
+
+        }
         }
     }
-}
+

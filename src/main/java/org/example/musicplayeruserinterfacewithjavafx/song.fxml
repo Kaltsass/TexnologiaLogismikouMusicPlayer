@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="254.0" prefWidth="200.0" styleClass="primary_color" stylesheets="@../../../css/style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.musicplayeruserinterfacewithjavafx.SongController">
+    <children>
+        <ImageView fx:id="img" fitHeight="200.0" fitWidth="200.0" pickOnBounds="true" smooth="false">
+            <image>
+                <Image url="@../../../img/dukis.png" />
+            </image>
+        </ImageView>
+        <Label fx:id="songName" prefHeight="36.0" prefWidth="203.0" styleClass="primary_color" stylesheets="@../../../../resources/css/style.css" text="Didgeridoo" textFill="WHITE">
+            <font>
+                <Font name="System Bold" size="18.0" />
+            </font>
+        </Label>
+        <Label fx:id="artist" prefHeight="36.0" prefWidth="203.0" styleClass="primary_color" stylesheets="@../../../../resources/css/style.css" text="Dukys" textFill="WHITE">
+            <font>
+                <Font size="15.0" />
+            </font>
+        </Label>
+    </children>
+</VBox>

@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.String?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="890.0" prefWidth="1315.0" styleClass="primary_color" stylesheets="@../../../css/style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.musicplayeruserinterfacewithjavafx.HelloController">
+  <left>
+    <VBox prefHeight="200.0" prefWidth="235.0" spacing="20.0" stylesheets="@../../../css/style.css" BorderPane.alignment="CENTER">
+      <children>
+        <ImageView fitHeight="39.0" fitWidth="36.0" pickOnBounds="true" preserveRatio="true">
+          <image>
+            <Image url="@../../../img/dots_menu.png" />
+          </image>
+          <VBox.margin>
+            <Insets left="20.0" top="20.0" />
+          </VBox.margin>
+        </ImageView>
+        <VBox prefHeight="152.0" prefWidth="235.0" spacing="7.0">
+          <children>
+            <VBox prefHeight="50.0" prefWidth="235.0">
+              <children>
+                <HBox alignment="CENTER" prefHeight="50.0" prefWidth="200.0" spacing="20.0" styleClass="selected">
+                  <children>
+                    <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                      <image>
+                        <Image url="@../../../img/home_png.png" />
+                      </image>
+                      <HBox.margin>
+                        <Insets />
+                      </HBox.margin>
+                    </ImageView>
+                    <Label prefHeight="17.0" prefWidth="96.0" text="Home" textFill="WHITE">
+                      <font>
+                        <Font name="System Bold Italic" size="18.0" />
+                      </font>
+                    </Label>
+                  </children>
+                </HBox>
+              </children>
+            </VBox>
+            <HBox alignment="CENTER" prefHeight="50.0" prefWidth="200.0" spacing="20.0" stylesheets="@../../../css/style.css">
+              <children>
+                <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                  <image>
+                    <Image url="@../../../img/compass.png" />
+                  </image>
+                  <HBox.margin>
+                    <Insets />
+                  </HBox.margin>
+                </ImageView>
+                <Label prefHeight="17.0" prefWidth="96.0" text="Explore" textFill="#a1a1a1">
+                  <font>
+                    <Font name="System Bold Italic" size="18.0" />
+                  </font>
+                </Label>
+              </children>
+            </HBox>
+            <HBox alignment="CENTER" prefHeight="50.0" prefWidth="200.0" spacing="20.0">
+              <children>
+                <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                  <image>
+                    <Image url="@../../../img/radio_png.png" />
+                  </image>
+                  <HBox.margin>
+                    <Insets />
+                  </HBox.margin>
+                </ImageView>
+                <Label prefHeight="17.0" prefWidth="96.0" text="Radio" textFill="#a1a1a1">
+                  <font>
+                    <Font name="System Bold Italic" size="18.0" />
+                  </font>
+                </Label>
+              </children>
+            </HBox>
+          </children>
+        </VBox>
+        <VBox prefHeight="363.0" prefWidth="235.0">
+          <children>
+            <Label prefHeight="54.0" prefWidth="193.0" text="YOUR LIBRARY" textFill="#a1a1a1">
+              <VBox.margin>
+                <Insets />
+              </VBox.margin>
+              <padding>
+                <Insets left="10.0" right="10.0" />
+              </padding>
+            </Label>
+            <Label prefHeight="40.0" prefWidth="192.0" text="Made For You" textFill="WHITE">
+              <padding>
+                <Insets left="10.0" right="10.0" />
+              </padding>
+            </Label>
+            <Label prefHeight="40.0" prefWidth="192.0" text="Recently Played" textFill="WHITE">
+              <padding>
+                <Insets left="10.0" right="10.0" />
+              </padding>
+            </Label>
+            <Label prefHeight="40.0" prefWidth="192.0" text="Liked Songs" textFill="WHITE">
+              <padding>
+                <Insets left="10.0" right="10.0" />
+              </padding>
+            </Label>
+            <Label prefHeight="40.0" prefWidth="192.0" text="Albums" textFill="WHITE">
+              <padding>
+                <Insets left="10.0" right="10.0" />
+              </padding>
+            </Label>
+            <Label prefHeight="40.0" prefWidth="192.0" text="Artists" textFill="WHITE">
+              <padding>
+                <Insets left="10.0" right="10.0" />
+              </padding>
+            </Label>
+            <Label prefHeight="40.0" prefWidth="192.0" text="Podcasts" textFill="WHITE">
+              <padding>
+                <Insets left="10.0" right="10.0" />
+              </padding>
+            </Label>
+          </children>
+          <padding>
+            <Insets left="20.0" right="20.0" />
+          </padding>
+        </VBox>
+        <Label prefHeight="40.0" prefWidth="192.0" text="Playlists" textFill="#a1a1a1">
+          <padding>
+            <Insets left="20.0" right="10.0" />
+          </padding>
+          <font>
+            <Font size="14.0" />
+          </font>
+        </Label>
+        <Pane prefHeight="134.0" prefWidth="235.0" VBox.vgrow="ALWAYS" />
+        <HBox alignment="CENTER" prefHeight="75.0" prefWidth="235.0" spacing="20.0" styleClass="top-border" stylesheets="@../../../css/style.css">
+          <children>
+            <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
+              <image>
+                <Image url="@../../../img/new_playlist.png" />
+              </image>
+            </ImageView>
+            <Label prefHeight="40.0" prefWidth="108.0" text="New Playlist" textFill="#a1a1a1">
+              <padding>
+                <Insets left="10.0" right="10.0" />
+              </padding>
+              <font>
+                <Font size="14.0" />
+              </font>
+            </Label>
+          </children>
+        </HBox>
+      </children>
+      <styleClass>
+        <String fx:value="primary_color" />
+        <String fx:value="secondary-color" />
+      </styleClass>
+    </VBox>
+  </left>
+  <center>
+    <VBox prefHeight="200.0" prefWidth="100.0" spacing="20.0" stylesheets="@../../../css/style.css" BorderPane.alignment="CENTER">
+      <children>
+        <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="1080.0" spacing="20.0">
+          <children>
+            <HBox alignment="CENTER_LEFT">
+              <children>
+                <Button mnemonicParsing="false" style="-fx-background-color: transparent;">
+                  <graphic>
+                    <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                      <image>
+                        <Image url="@../../../img/goback.png" />
+                      </image>
+                    </ImageView>
+                  </graphic>
+                </Button>
+                <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                  <image>
+                    <Image url="@../../../img/goback - Copy.png" />
+                  </image>
+                </ImageView>
+              </children>
+            </HBox>
+            <HBox alignment="CENTER" maxHeight="-Infinity" prefHeight="35.0" prefWidth="215.0" spacing="10.0" styleClass="search-container" stylesheets="@../../../css/style.css">
+              <children>
+                <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                  <image>
+                    <Image url="@../../../img/search_icon.png" />
+                  </image>
+                </ImageView>
+                <TextField prefHeight="26.0" prefWidth="134.0" promptText="Search" style="-fx-background-color: transparent;" />
+              </children>
+            </HBox>
+            <Pane prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
+            <Button mnemonicParsing="false" prefHeight="40.0" prefWidth="120.0" styleClass="upgrade-button" stylesheets="@../../../css/style.css" text="Upgrade" textFill="WHITE" />
+            <HBox alignment="CENTER" prefHeight="50.0" prefWidth="256.0">
+              <children>
+                <ImageView fitHeight="50.0" fitWidth="157.0" pickOnBounds="true" preserveRatio="true">
+                  <image>
+                    <Image url="@../../../img/profile_icon.png" />
+                  </image>
+                </ImageView>
+                <Label prefHeight="18.0" prefWidth="165.0" text="International Hellenic Uni" textFill="WHITE" />
+              </children>
+            </HBox>
+          </children>
+        </HBox>
+        <VBox prefHeight="200.0" prefWidth="100.0">
+          <children>
+            <ImageView fitHeight="240.0" fitWidth="1080.0" pickOnBounds="true" smooth="false">
+              <image>
+                <Image url="@../../../img/background.png" />
+              </image>
+            </ImageView>
+          </children>
+        </VBox>
+        <ScrollPane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: transparent;" VBox.vgrow="ALWAYS">
+          <content>
+            <VBox prefHeight="570.0" prefWidth="1680.0" spacing="10.0">
+              <children>
+                <Label text="Recently Played" textFill="WHITE">
+                  <font>
+                    <Font size="15.0" />
+                  </font>
+                </Label>
+                <ScrollPane fitToWidth="true" minViewportHeight="270.0" prefHeight="264.0" prefWidth="1072.0" style="-fx-background-color: transparent;" stylesheets="@../../../css/style.css">
+                  <content>
+                    <HBox fx:id="recentlyPlayedContainer" prefHeight="0.0" prefWidth="0.0" spacing="30.0" />
+                  </content>
+                </ScrollPane>
+                <Label text="Favorites" textFill="WHITE">
+                  <font>
+                    <Font size="15.0" />
+                  </font>
+                </Label>
+                <ScrollPane fitToWidth="true" minViewportHeight="250.0" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: transparent;">
+                  <content>
+                    <HBox prefHeight="100.0" prefWidth="200.0" />
+                  </content>
+                </ScrollPane>
+              </children>
+            </VBox>
+          </content>
+        </ScrollPane>
+      </children>
+    </VBox>
+  </center>
+</BorderPane>
